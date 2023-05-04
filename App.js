@@ -1,31 +1,30 @@
-import React from 'react';
-import 'react-native-gesture-handler';
-import { createStackNavigator } from '@react-navigation/stack';
+import React, { Component } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
 
 import Login from './components/login';
-import SignUp from './components/signup';
-
-const Stack = createStackNavigator();
-
-const App = () => {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: '#191970',
-        },
-        headerTintColor: '#fff',
-      }}
-      >
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="SignUp" component={SignUp} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
+import Signup from './components/signup';
+import MainAppTabs from './components/mainAppTabs';
 
 
+const AuthStack = createStackNavigator();
 
-export default App;
+
+export default class App extends Component {
+  render() {
+    return (
+      <NavigationContainer>
+        <AuthStack.Navigator
+         screenOptions={{
+          headerShown: false, // Add this line to remove headers from all screens
+        }}>
+          <AuthStack.Screen name="Login" component={Login} />
+          <AuthStack.Screen name="SignUp" component={Signup} />
+          <AuthStack.Screen name="MainAppTabs" component={MainAppTabs} />
+        </AuthStack.Navigator>
+      </NavigationContainer>
+    );
+  }
+}
+
