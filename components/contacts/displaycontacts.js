@@ -14,10 +14,16 @@ export default class ContactsList extends Component {
     }
   }
     
-    componentDidMount() {
-        console.log("mounted");
-        this.getData();
-    }
+  componentDidMount() {
+    console.log("mounted");
+    this.unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.getData();
+    });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
 
     deleteContact = async (user_id) => {
       return fetch (`http://localhost:3333/api/1.0.0/user/${user_id}/contact`, {

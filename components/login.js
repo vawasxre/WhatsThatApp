@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import EmailValidator from 'email-validator';
+import Toast from 'react-native-toast-message';
 
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -77,6 +78,10 @@ export default class Login extends Component {
             throw "Something went wrong!"
           }
         })
+        .catch(error => {
+          console.log(error);
+          toast.error(error);
+        });
 
 
     }

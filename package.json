@@ -27,8 +27,10 @@
     "react-native": "0.71.4",
     "react-native-gesture-handler": "~2.9.0",
     "react-native-reanimated": "~2.14.4",
+    "react-native-toast-message": "^2.1.6",
     "react-native-vector-icons": "^9.2.0",
-    "react-native-web": "~0.18.10"
+    "react-native-web": "~0.18.10",
+    "react-toastify": "^9.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

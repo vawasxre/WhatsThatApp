@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export default class SearchedUser extends Component {
   constructor(props) {
     super(props);
@@ -11,8 +13,10 @@ export default class SearchedUser extends Component {
     }
   }
 
-  addContact = async () => {
-        return fetch (`http://localhost:3333/api/1.0.0/user/${this.state.ContactID}/contact`, {
+
+  addContact = async (user_id) => {
+    
+        return fetch (`http://localhost:3333/api/1.0.0/user/${user_id}/contact`, {
           method: "POST",
           headers: {'X-Authorization': await AsyncStorage.getItem("whatsthat_session_token")
 
@@ -20,7 +24,6 @@ export default class SearchedUser extends Component {
         })
         .then((response) => {
           if(response.status === 200){
-            this.getData()
             return response.json()
           }else if (response.status === 400){
             throw 'Something went wrong!';
@@ -37,8 +40,6 @@ export default class SearchedUser extends Component {
           console.log(error)
         })
       }
-
-
 
 
 
@@ -60,17 +61,9 @@ export default class SearchedUser extends Component {
 
                 <TouchableOpacity
                   style={styles.addContactButton}
-                  onPress={this.addContact}
+                  onPress={() => this.addContact(item.user_id)}
                 >
                   <Text style={styles.addContactButtonText}>Add Contact</Text>
-                </TouchableOpacity>
-
-    
-                <TouchableOpacity
-                  style={styles.blockButton}
-                  onPress={() => console.log('blocked')}
-                >
-                  <Text style={styles.blockButtonText}>Block</Text>
                 </TouchableOpacity>
 
             </View>
@@ -128,17 +121,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   addContactButtonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  blockButton: {
-    backgroundColor: '#f00',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 5,
-  },
-  blockButtonText: {
     color: '#fff',
     fontSize: 14,
     fontWeight: 'bold',
