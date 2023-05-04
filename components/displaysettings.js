@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
-import EmailValidator from 'email-validator';
-
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

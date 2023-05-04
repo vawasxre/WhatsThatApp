@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet, FlatList } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, StyleSheet, FlatList, Button } from 'react-native';
 
 
 
@@ -11,14 +11,49 @@ export default class AllChats extends Component {
     this.state = {
       isLoading: true,
       chatListData: [],
+      chat_name: "",
       
     }
+    this.startConvo = this.startConvo.bind(this);
   }
     
-    componentDidMount() {
-        console.log("mounted");
-        this.getData();
-    }
+  componentDidMount() {
+    console.log("mounted");
+    this.unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.getData();
+    });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+  startConvo = async() =>{
+    return fetch (`http://localhost:3333/api/1.0.0/chat/`, {
+      method: 'POST',
+        headers: {
+          'X-Authorization': await AsyncStorage.getItem("whatsthat_session_token"),
+          "Content-Type" : "application/json"
+        },
+        body: JSON.stringify({name: this.state.chat_name})
+        
+    })
+    .then((response) => {
+      if(response.status === 200){
+        return response.json()
+      }else if (response.status === 400){
+        throw 'Something went wrong!';
+      }
+    })
+    .then((responseJson) => {
+      console.log(responseJson)
+      this.getData()
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  }
+
 
     getData = async() => {
       return fetch ("http://localhost:3333/api/1.0.0/chat", {
@@ -26,7 +61,6 @@ export default class AllChats extends Component {
           headers: {
             'X-Authorization': await AsyncStorage.getItem("whatsthat_session_token")
           },
-          
       })
       .then((response) => {
         if(response.status === 200){
@@ -59,6 +93,16 @@ export default class AllChats extends Component {
       return (
         <View style={styles.container}>
 
+        <TextInput
+          style={styles.input}
+          placeholder="Enter chat name"
+          onChangeText={(text) => this.setState({ chat_name: text })}
+        />
+
+        <TouchableOpacity style={styles.button} onPress={this.startConvo}>
+          <Text style={styles.buttonText}>Create Chat</Text>
+        </TouchableOpacity>
+
 
      <FlatList 
       data={this.state.chatListData}
@@ -71,6 +115,10 @@ export default class AllChats extends Component {
         <View>
           <Text style={styles.chatName}>{item.name}</Text>
           <Text style={styles.chatSnippet}>{item.last_message.message}</Text>
+          <Button
+          title="settings"
+          onPress={() => this.props.navigation.navigate('ChatInfo', { chat_id: item.chat_id })}
+          />
         </View>
       </View>
     </TouchableOpacity>
@@ -86,8 +134,6 @@ export default class AllChats extends Component {
         </View>
       );
     }
-
-    
   }
 
   const styles = StyleSheet.create({
@@ -95,6 +141,23 @@ export default class AllChats extends Component {
       flex: 1,
       backgroundColor: '#191970',
       padding: 20,
+    },
+    input: {
+      borderWidth: 1,
+      borderColor: '#ccc',
+      borderRadius: 4,
+      padding: 8,
+      marginBottom: 16,
+    },
+    button: {
+      backgroundColor: '#007AFF',
+      padding: 12,
+      borderRadius: 4,
+    },
+    buttonText: {
+      color: '#fff',
+      fontWeight: 'bold',
+      textAlign: 'center',
     },
     chatItem: {
       flexDirection: 'row',

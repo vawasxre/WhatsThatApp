@@ -51,7 +51,7 @@ export default class Signup extends Component {
 
   
       return fetch('http://localhost:3333/api/1.0.0/user', {
-        method: 'post',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },

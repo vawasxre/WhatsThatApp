@@ -9,25 +9,77 @@ export default class SingleChat extends Component {
     this.state = {
       isLoading: true,
       messages: [],
+      new_message: "",
+      session_token: null, //
     }
   }
     
-    componentDidMount() {
-        console.log("mounted");
+  componentDidMount() {
+    console.log("mounted");
+    this.unsubscribe = this.props.navigation.addListener('focus', async () => {
+      this.setState({session_token: await AsyncStorage.getItem("whatsthat_user_id")}, () => {
         this.getData();
-       
+        this.interval = setInterval(() => {
+          this.getData(); // fetch new messages every 5 seconds (or any other interval)
+        }, 5000);
+      })
+     
+    });
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval); // clear interval when component unmounts
+    this.unsubscribe();
+  }
+
+
+  getStyle = (author) => {
+    console.log(author.user_id)
+    const loggedInUserId = parseInt(this.state.session_token);
+    console.log(author.user_id, loggedInUserId, author.user_id === loggedInUserId)
+    if (author.user_id === loggedInUserId){
+      return styles.right;
+    }else{
+      return styles.left;
     }
-      getStyle = (from) => {
-        if (from == "whatsthat_user_id"){
-          return styles.left;
-        }else{
-          return styles.right;
-        }
+    // return styles.right;
+  }
+
+    addMessage = async() =>{
+
+      if (this.state.new_message === ""){
+        console.log("cannot send empty message")
+        return;
       }
+
+      const chat_id = this.props.route.params.chat_id
+
+      return fetch (`http://localhost:3333/api/1.0.0/chat/${chat_id}/message`, {
+        method: 'POST',
+          headers: {
+            'X-Authorization': await AsyncStorage.getItem("whatsthat_session_token"),
+            "Content-Type" : "application/json"
+          },
+          body: JSON.stringify({message: this.state.new_message})
+          
+      })
+      .then((response) => {
+        if(response.status === 200){
+            console.log("Added message")
+            this.setState({new_message: ""})
+            this.getData();
+        }else if (response.status === 400){
+          throw 'Something went wrong!';
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    }
 
     getData = async() => {
       const chat_id = this.props.route.params.chat_id
-      return fetch (`http://localhost:3333/api/1.0.0/chat/` + chat_id , {
+      return fetch (`http://localhost:3333/api/1.0.0/chat/${chat_id}`, {
         method: 'GET',
           headers: {
             'X-Authorization': await AsyncStorage.getItem("whatsthat_session_token")
@@ -51,10 +103,8 @@ export default class SingleChat extends Component {
       .catch((error) => {
         console.log(error)
       })
-
-
-
     }
+
 
     render() {
       if (this.state.isLoading) {
@@ -74,8 +124,23 @@ export default class SingleChat extends Component {
                 data={this.state.messages}
 
                 renderItem={({ item }) => (
-                  <View style={this.getStyle(item.from)}>
+
+                  <View style={this.getStyle(item.author)}>
+
                     <Text style={styles.message}>{item.message}</Text>
+
+                    <TouchableOpacity
+                      style={styles.editButton}
+                      onPress={() => {
+                        this.props.navigation.navigate('EditMessage', {
+                          message_id : item.message_id,
+                          message : item.message,
+                          chat_id : this.props.route.params.chat_id,
+                        });
+                      }}
+                    >
+                      <Text style={styles.editButtonText}>o</Text>
+                    </TouchableOpacity>
                   </View>
                 )}
       
@@ -86,20 +151,29 @@ export default class SingleChat extends Component {
         }
         return message_id.toString();
       }}
+      inverted
         />
 
             </View>
             <View style={styles.typeBox}>
                 <TextInput
+                value={this.state.new_message}
+                onChangeText={(val) => this.setState({new_message: val})}
                 placeholder='type something..'
                 />
+
+                <TouchableOpacity 
+                style={styles.sendButton}
+                onPress={() => this.addMessage()}
+                >
+                  <Text style={styles.sendButtonText}>Send</Text>
+
+                </TouchableOpacity>
             </View>
 
         </View>
       );
     }
-
-    
   }
 
   const styles = StyleSheet.create({
@@ -114,6 +188,7 @@ export default class SingleChat extends Component {
     left: {
       alignSelf: 'flex-start',
       backgroundColor: '#f0f0f0',
+      color: 'red',
       padding: 10,
       marginVertical: 5,
       borderRadius: 10,
@@ -122,6 +197,7 @@ export default class SingleChat extends Component {
     right: {
       alignSelf: 'flex-end',
       backgroundColor: '#0084ff',
+      color: 'green',
       padding: 10,
       marginVertical: 5,
       borderRadius: 10,
@@ -144,6 +220,29 @@ export default class SingleChat extends Component {
       backgroundColor: '#fff',
       borderRadius: 10,
       marginRight: 10,
+    },
+    sendButton: {
+      backgroundColor: '#0084ff',
+      borderRadius: 10,
+      padding: 10,
+    },
+    sendButtonText: {
+      color: '#fff',
+      fontWeight: 'bold',
+      textAlign: 'center',
+    },
+    editButton: {
+      backgroundColor: '#0084ff',
+      borderRadius: 15,
+      padding: 5,
+      width: 30,
+      height: 30,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    editButtonText: {
+      color: '#fff',
+      fontSize: 20,
     },
     
   });

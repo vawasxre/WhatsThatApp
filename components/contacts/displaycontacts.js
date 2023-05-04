@@ -9,6 +9,7 @@ export default class ContactsList extends Component {
     this.state = {
       isLoading: true,
       contactsListData: [],
+      ContactID: '',
       searchQuery: '',
     }
   }
@@ -17,6 +18,62 @@ export default class ContactsList extends Component {
         console.log("mounted");
         this.getData();
     }
+
+    deleteContact = async (user_id) => {
+      return fetch (`http://localhost:3333/api/1.0.0/user/${user_id}/contact`, {
+        method: "DELETE",
+        headers: {'X-Authorization': await AsyncStorage.getItem("whatsthat_session_token")
+
+        },
+      })
+      .then((response) => {
+        if(response.status === 200){
+          this.getData()
+          return response.json()
+        }else if (response.status === 400){
+          throw 'Something went wrong!';
+        }
+      })
+      .then((responseJson) => {
+        console.log(responseJson)
+        this.setState({
+          isLoading: false,
+          contactsListData: responseJson
+        });
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+
+    }
+
+    blockContact = async (user_id) => {
+      return fetch (`http://localhost:3333/api/1.0.0/user/${user_id}/block`, {
+        method: "POST",
+        headers: {'X-Authorization': await AsyncStorage.getItem("whatsthat_session_token")
+
+        },
+      })
+      .then((response) => {
+        if(response.status === 200){
+          this.getData()
+          return response.json()
+        }else if (response.status === 400){
+          throw 'Something went wrong!';
+        }
+      })
+      .then((responseJson) => {
+        console.log(responseJson)
+        this.setState({
+          isLoading: false,
+          contactsListData: responseJson
+        });
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    }
+
 
 
     getData = async() => {
@@ -30,7 +87,7 @@ export default class ContactsList extends Component {
       .then((response) => {
         if(response.status === 200){
           return response.json()
-        }else if (response.status === 400){
+        }else if (response.status === 401){
           throw 'Something went wrong!';
         }
       })
@@ -72,14 +129,24 @@ export default class ContactsList extends Component {
   
 
     render() {
+      if (this.state.isLoading){
+        return(
+          <View>
+            <ActivityIndicator
+            size="large"
+            color="#00ff00"
+            />
+          </View>
+        )
+      }
       return (
         <View style={styles.container}>
 
-<TextInput
+        <TextInput
           style={styles.searchBox}
           onChangeText={searchQuery => this.setState({searchQuery})}
           value={this.state.searchQuery}
-          placeholder="Search contacts..."
+          placeholder="Search users..."
         />
 
         <TouchableOpacity
@@ -89,7 +156,6 @@ export default class ContactsList extends Component {
           <Text style={styles.searchButtonText}>Search</Text>
         </TouchableOpacity>
 
-      
           <FlatList
             data={this.state.contactsListData}
             renderItem={({ item }) => (
@@ -98,14 +164,14 @@ export default class ContactsList extends Component {
     
                 <TouchableOpacity
                   style={styles.deleteButton}
-                  onPress={() => console.log('deleted')}
+                  onPress={() => this.deleteContact(item.user_id)}
                 >
                   <Text style={styles.deleteButtonText}>Delete</Text>
                 </TouchableOpacity>
     
                 <TouchableOpacity
                   style={styles.blockButton}
-                  onPress={() => console.log('blocked')}
+                  onPress={() => this.blockContact(item.user_id)}
                 >
                   <Text style={styles.blockButtonText}>Block</Text>
                 </TouchableOpacity>
@@ -154,6 +220,17 @@ export default class ContactsList extends Component {
         borderRadius: 5,
       },
       searchButtonText: {
+        color: '#fff',
+        fontSize: 14,
+        fontWeight: 'bold',
+      },
+      addContactButton: {
+        backgroundColor: '#f00',
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderRadius: 5,
+      },
+      addContactButtonText: {
         color: '#fff',
         fontSize: 14,
         fontWeight: 'bold',

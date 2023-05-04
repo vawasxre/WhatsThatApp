@@ -8,6 +8,7 @@ export default class BlockedContacts extends Component {
       this.state = {
         isLoading: true,
         blockedListData: [],
+        ContactID:'',
         
       }
     }
@@ -15,6 +16,33 @@ export default class BlockedContacts extends Component {
       componentDidMount() {
           console.log("mounted");
           this.getData();
+      }
+
+      unblockContact = async (user_id) => {
+        return fetch (`http://localhost:3333/api/1.0.0/user/${user_id}/block`, {
+          method: "DELETE",
+          headers: {'X-Authorization': await AsyncStorage.getItem("whatsthat_session_token")
+  
+          },
+        })
+        .then((response) => {
+          if(response.status === 200){
+            this.getData()
+            return response.json()
+          }else if (response.status === 400){
+            throw 'Something went wrong!';
+          }
+        })
+        .then((responseJson) => {
+          console.log(responseJson)
+          this.setState({
+            isLoading: true,
+          });
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+  
       }
   
       getData = async() => {
@@ -56,11 +84,12 @@ export default class BlockedContacts extends Component {
               renderItem={({ item }) => (
                 <View style={styles.itemContainer}>
                   <Text style={styles.itemName}>{item.first_name} {item.last_name}</Text>
+
                   <TouchableOpacity
-                    style={styles.deleteButton}
-                    onPress={() => console.log('unblocked')}
+                    style={styles.unblockButton}
+                    onPress={() => this.unblockContact(item.user_id)}
                   >
-                    <Text style={styles.deleteButtonText}>Unblock</Text>
+                    <Text style={styles.unblockButtonText}>Unblock</Text>
                   </TouchableOpacity>
                 </View>
               )}
@@ -105,12 +134,12 @@ const styles = StyleSheet.create({
       fontSize: 18,
       fontWeight: 'bold',
     },
-    deleteButton: {
+    unblockButton: {
       backgroundColor: 'red',
       padding: 10,
       borderRadius: 5,
     },
-    deleteButtonText: {
+    unblockButtonText: {
       color: '#fff',
       fontWeight: 'bold',
       textAlign: 'center',

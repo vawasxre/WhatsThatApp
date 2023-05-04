@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import ContactsList from './displaycontacts';
 import BlockedContacts from './displayblocked';
-import SearchedUser from '../displaysingleusersummary';
+import SearchedUser from './displaysingleusersummary';
 
 const ContactsStack = createStackNavigator();
 

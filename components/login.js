@@ -46,7 +46,7 @@ export default class Login extends Component {
 
   
       return fetch('http://localhost:3333/api/1.0.0/login', {
-          method: 'post',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },

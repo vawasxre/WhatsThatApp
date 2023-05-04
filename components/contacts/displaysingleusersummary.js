@@ -2,9 +2,51 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 
 export default class SearchedUser extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true,
+      contactsListData: [],
+      ContactID: ''
+    }
+  }
+
+  addContact = async () => {
+        return fetch (`http://localhost:3333/api/1.0.0/user/${this.state.ContactID}/contact`, {
+          method: "POST",
+          headers: {'X-Authorization': await AsyncStorage.getItem("whatsthat_session_token")
+
+          },
+        })
+        .then((response) => {
+          if(response.status === 200){
+            this.getData()
+            return response.json()
+          }else if (response.status === 400){
+            throw 'Something went wrong!';
+          }
+        })
+        .then((responseJson) => {
+          console.log(responseJson)
+          this.setState({
+            isLoading: false,
+            contactsListData: responseJson
+          });
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      }
+
+
+
+
+
   render() {
     const { route } = this.props;
     const { searchResults } = route.params;
+
+    
 
     return (
       <View style={styles.container}>
@@ -16,12 +58,13 @@ export default class SearchedUser extends Component {
             <View style={styles.resultItem}>
               <Text style={styles.resultName}>{item.given_name} {item.family_name}</Text>
 
-              <TouchableOpacity
-                  style={styles.deleteButton}
-                  onPress={() => console.log('deleted')}
+                <TouchableOpacity
+                  style={styles.addContactButton}
+                  onPress={this.addContact}
                 >
-                  <Text style={styles.deleteButtonText}>Delete</Text>
+                  <Text style={styles.addContactButtonText}>Add Contact</Text>
                 </TouchableOpacity>
+
     
                 <TouchableOpacity
                   style={styles.blockButton}
@@ -78,13 +121,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000',
   },
-  deleteButton: {
+  addContactButton: {
     backgroundColor: '#f00',
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 5,
   },
-  deleteButtonText: {
+  addContactButtonText: {
     color: '#fff',
     fontSize: 14,
     fontWeight: 'bold',
