@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, StyleSheet, ToastAndroid } from 'react-native';
 import EmailValidator from 'email-validator';
-import Toast from 'react-native-toast-message';
-
+import Toast from 'react-native-root-toast';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -60,9 +59,11 @@ export default class Login extends Component {
           if(response.status === 200){
             return response.json()
           }else if (response.status === 400){
-            throw 'Invalid email or password';
-          }else {
-            throw 'Something went wrong!';
+            throw alert("400: This page isn't working. If the problem continues, contact the site owner" );
+          }else if(response.status === 500){
+            throw alert('500: Oops. Something went wrong. This server encountered an error and was unable to complete your request.')
+          } else {
+            throw alert("Something went wrong!")
           }
         })
         .then(async(responseJson) => {
@@ -80,7 +81,6 @@ export default class Login extends Component {
         })
         .catch(error => {
           console.log(error);
-          toast.error(error);
         });
 
 
@@ -90,6 +90,11 @@ export default class Login extends Component {
   render(){
     return(
       <View style={styles.container}>
+
+
+      <Text style={styles.title}>
+        WhatsThat
+      </Text>
 
       <TextInput
         style={styles.input}
@@ -136,6 +141,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#191970',
     alignItems: 'center',
     justifyContent: 'center',
+   },
+
+   title:{
+    color: "#f0f8ff",
+    fontSize: 50,
+    height: 100,
+
    },
    
    input: {

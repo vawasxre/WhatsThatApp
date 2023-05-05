@@ -26,7 +26,15 @@ export default class SearchedUser extends Component {
           if(response.status === 200){
             return response.json()
           }else if (response.status === 400){
-            throw 'Something went wrong!';
+            throw alert("400: you can't add yourself as a contact!" );
+          }else if (response.status === 401){
+            throw alert('401: Authentication failed! you are not authorized to add a contact');
+          } else if (response.status === 404){
+            throw alert('404: Page not found!')
+          }else if(response.status === 500){
+            throw alert('500: Oops. Something went wrong. This server encountered an error and was unable to complete your request.')
+          } else {
+            throw alert("Something went wrong!")
           }
         })
         .then((responseJson) => {

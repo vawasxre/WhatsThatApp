@@ -5,7 +5,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import MainChatStack from './chats/chatStack';
 import MainContactsStack from './contacts/contactsStack';
 import MainProfileStack from './profile/profileStack';
-import Settings from './displaysettings';
 
 const MainAppTabs = createBottomTabNavigator();
 
@@ -44,7 +43,6 @@ export default class MainAppNav extends Component {
                     <MainAppTabs.Screen name="Chats" component={MainChatStack}/>
                     <MainAppTabs.Screen name="Contacts" component={MainContactsStack}/>
                     <MainAppTabs.Screen name="Profile" component={MainProfileStack}/>
-                    <MainAppTabs.Screen name="Settings" component={Settings}/>
                 </MainAppTabs.Navigator>
         );
     }

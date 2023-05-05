@@ -80,7 +80,17 @@ export default class UpdateProfile extends Component {
             console.log("User Updated!")
           return response.json()
         }else if (response.status === 400){
-          throw 'Something went wrong!';
+          throw alert("400: This page isn't working. If the problem continues, contact the site owner" );
+        }else if (response.status === 401){
+          throw alert('401: Authentication failed! you are not authorized to change profile details');
+        } else if (response.status === 403){
+          throw alert('403: Forbidden! you do not have the permissions to access profile details')
+        } else if (response.status === 404){
+          throw alert('404: Page not found!')
+        }else if(response.status === 500){
+          throw alert('500: Oops. Something went wrong. This server encountered an error and was unable to complete your request.')
+        } else {
+          throw alert("Something went wrong!")
         }
       })
       .catch((error) => {

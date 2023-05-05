@@ -30,7 +30,15 @@ export default class BlockedContacts extends Component {
             this.getData()
             return response.json()
           }else if (response.status === 400){
-            throw 'Something went wrong!';
+            throw alert("400: you can't block yourself!" );
+          }else if (response.status === 401){
+            throw alert('401: Authentication failed! you are not authorized to unblock a contact');
+          } else if (response.status === 404){
+            throw alert('404: Page not found!')
+          }else if(response.status === 500){
+            throw alert('500: Oops. Something went wrong. This server encountered an error and was unable to complete your request.')
+          } else {
+            throw alert("Something went wrong!")
           }
         })
         .then((responseJson) => {
@@ -56,8 +64,12 @@ export default class BlockedContacts extends Component {
         .then((response) => {
           if(response.status === 200){
             return response.json()
-          }else if (response.status === 400){
-            throw 'Something went wrong!';
+          }else if (response.status === 401){
+            throw alert('401: Authentication failed! you are not authorized to access blocked contacts');
+          } else if(response.status === 500){
+            throw alert('500: Oops. Something went wrong. This server encountered an error and was unable to complete your request.')
+          } else {
+            throw alert("Something went wrong!")
           }
         })
         .then((responseJson) => {

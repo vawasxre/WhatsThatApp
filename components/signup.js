@@ -21,6 +21,7 @@ export default class Signup extends Component {
   }
 
   signup(){
+
     this.setState({submitted: true})
     this.setState({error: ""})
 
@@ -30,7 +31,7 @@ export default class Signup extends Component {
     }
 
     if(!EmailValidator.validate(this.state.email)){
-        this.setState({error: "Must enter valid email"})
+        this.setState({error: "Must enter valid email!"})
         return;
     }
 
@@ -66,9 +67,11 @@ export default class Signup extends Component {
           if(response.status === 201){
             return response.json()
           }else if (response.status === 400){
-            throw "Email already exists or password isn't strong enough!";
+            throw alert("400: This page isn't working. If the problem continues, contact the site owner" );
+          }else if(response.status === 500){
+            throw alert('500: Oops. Something went wrong. This server encountered an error and was unable to complete your request.')
           }else {
-            throw "Something went wrong!";
+            throw alert("Something went wrong!");
           }
         })
         .then((responseJson) => {

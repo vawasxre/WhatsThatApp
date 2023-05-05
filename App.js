@@ -14,7 +14,7 @@ const AuthStack = createStackNavigator();
 export default class App extends Component {
   render() {
     return (
-      <NavigationContainer>
+        <NavigationContainer>
         <AuthStack.Navigator
          screenOptions={{
           headerShown: false, // Add this line to remove headers from all screens
@@ -24,6 +24,7 @@ export default class App extends Component {
           <AuthStack.Screen name="MainAppTabs" component={MainAppTabs} />
         </AuthStack.Navigator>
       </NavigationContainer>
+      
     );
   }
 }

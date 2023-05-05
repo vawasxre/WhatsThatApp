@@ -37,7 +37,15 @@ export default class ContactsList extends Component {
           this.getData()
           return response.json()
         }else if (response.status === 400){
-          throw 'Something went wrong!';
+          throw alert("404: you can't remove yourself as a contact!" );
+        }else if (response.status === 401){
+          throw alert('401: Authentication failed! you are not authorized to delete a contact');
+        } else if (response.status === 404){
+          throw alert('404: Page not found!')
+        }else if(response.status === 500){
+          throw alert('500: Oops. Something went wrong. This server encountered an error and was unable to complete your request.')
+        } else {
+          throw alert("Something went wrong!")
         }
       })
       .then((responseJson) => {
@@ -65,7 +73,15 @@ export default class ContactsList extends Component {
           this.getData()
           return response.json()
         }else if (response.status === 400){
-          throw 'Something went wrong!';
+          throw alert("you can't block yourself!" );
+        }else if (response.status === 401){
+          throw alert('401: Authentication failed! you are not authorized to block a contact');
+        } else if (response.status === 404){
+          throw alert('404: Page not found!')
+        }else if(response.status === 500){
+          throw alert('500: Oops. Something went wrong. This server encountered an error and was unable to complete your request.')
+        } else {
+          throw alert("Something went wrong!")
         }
       })
       .then((responseJson) => {
@@ -94,7 +110,11 @@ export default class ContactsList extends Component {
         if(response.status === 200){
           return response.json()
         }else if (response.status === 401){
-          throw 'Something went wrong!';
+          throw alert('401: Authentication failed! you are not authorized to access contacts');
+        } else if(response.status === 500){
+          throw alert('500: Oops. Something went wrong. This server encountered an error and was unable to complete your request.')
+        } else {
+          throw alert("Something went wrong!")
         }
       })
       .then((responseJson) => {
@@ -125,8 +145,14 @@ export default class ContactsList extends Component {
           this.props.navigation.navigate('SearchedUser', { searchResults });
           this.setState({ searchQuery: '' });
           console.log(searchResults)
-        } else if (response.status === 400) {
-          throw 'Something went wrong!';
+        } else if (response.status === 400){
+          throw alert("400: This page isn't working. If the problem continues, contact the site owner" );
+        }else if (response.status === 401){
+          throw alert('401: Authentication failed! you are not authorized to search for contacts');
+        } else if(response.status === 500){
+          throw alert('500: Oops. Something went wrong. This server encountered an error and was unable to complete your request.')
+        } else {
+          throw alert("Something went wrong!")
         }
       } catch (error) {
         console.log(error);

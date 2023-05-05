@@ -10,8 +10,13 @@ export default class Profile extends Component {
       isLoading: true,
       profileData: [],
       photo: " ",
+      email: '',
+      password: '',
+      error: '',
+      submitted: false
       
     }
+    this.logout = this.logout.bind(this)
   }
 
     componentDidMount() {
@@ -40,8 +45,14 @@ export default class Profile extends Component {
       .then((response) => {
         if(response.status === 200){
           return response.blob();
-        }else if (response.status === 400){
-          throw 'Something went wrong!';
+        }else if (response.status === 401){
+          throw alert('401: Authentication failed! you are not authorized to access the profile photo');
+        }else if (response.status === 404){
+          throw alert('404: Page not found!')
+        }else if(response.status === 500){
+          throw alert('500: Oops. Something went wrong. This server encountered an error and was unable to complete your request.')
+        } else {
+          throw alert("Something went wrong!")
         }
       })
       .then((responseBlob) => {
@@ -70,8 +81,14 @@ export default class Profile extends Component {
       .then((response) => {
         if(response.status === 200){
           return response.json()
-        }else if (response.status === 400){
-          throw 'Something went wrong!';
+        }else if (response.status === 401){
+          throw alert('401: Authentication failed! you are not authorized to access profile details');
+        } else if (response.status === 404){
+          throw alert('404: Page not found!')
+        } else if(response.status === 500){
+          throw alert('500: Oops. Something went wrong. This server encountered an error and was unable to complete your request.')
+        } else {
+          throw alert("Something went wrong!")
         }
       })
       .then((responseJson) => {
@@ -86,6 +103,38 @@ export default class Profile extends Component {
       })
 
     }
+
+    logout = async() => {
+      
+      console.log("Logout")
+
+        return fetch('http://localhost:3333/api/1.0.0/logout', {
+            method: 'post',
+            headers: {
+              'X-Authorization': await AsyncStorage.getItem("whatsthat_session_token")
+            }
+              })
+          .then(async(response) => {
+            if(response.status === 200){
+                await AsyncStorage.removeItem("whatsthat_session_token")
+                await AsyncStorage.removeItem("whatsthat_user_id")
+                this.props.navigation.navigate("Login")
+            }else if (response.status === 401){
+                console.log("Unauthorised")
+                await AsyncStorage.removeItem("whatsthat_session_token")
+                await AsyncStorage.removeItem("whatsthat_user_id")
+                throw alert('401: Authentication failed! you are not authorized to logout');
+            }else if(response.status === 500){
+              throw alert('500: Oops. Something went wrong. This server encountered an error and was unable to complete your request.')
+            } else {
+              throw alert("Something went wrong!")
+            }
+          })
+          .catch((error) => {
+            this.setState({"error": error})
+            this.setState({"submitted": false});
+          })
+      }
 
     
     render() {
@@ -129,6 +178,10 @@ export default class Profile extends Component {
           >
           <Text style={styles.updatePhotoButtonText}>Update Photo</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity style={styles.logoutButton} onPress={this.logout}>
+          <Text style={styles.logoutButtonText}>Logout</Text>
+        </TouchableOpacity>
 
 
           </View>
@@ -189,6 +242,19 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
     fontWeight: 'bold',
-  }
+  },
+  logoutButton: {
+    backgroundColor: '#a9a9a9',
+    margin: 10,
+    paddingHorizontal: 25,
+    borderRadius: 5,
+    height: 40,
+    justifyContent: 'center'
+ },
+ logoutButtonText: {
+    color: '#f0f8ff',
+    textAlign: 'center',
+    fontWeight: 'bold'
+   }
 });
 
