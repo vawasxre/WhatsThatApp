@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import ProfileScreen from './displayprofile';
+import ProfileScreen from './displayprofile'
 import UpdateProfile from './updateprofile';
 import CameraScreen from './camera';
 

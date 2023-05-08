@@ -38,7 +38,11 @@ export default class ChatInfo extends Component {
       })
       .then((response) => {
         if(response.status === 200){
-          return response.json()
+          
+
+          return alert("Chat name changed!"), 
+          response.json()
+          
         }else if (response.status === 400){
           throw alert("400: This page isn't working. If the problem continues, contact the site owner" );
         }else if (response.status === 401){
@@ -59,6 +63,34 @@ export default class ChatInfo extends Component {
       .catch((error) => {
         console.log(error)
       })
+    }
+
+    searchContacts = async () => {
+      try {
+        const response = await fetch(`http://localhost:3333/api/1.0.0/search?q=${this.state.searchQuery}search_in=contacts&limit=20&offset=0`, {
+          method: 'GET',
+          headers: {
+            'X-Authorization': await AsyncStorage.getItem("whatsthat_session_token")
+          },
+        });
+  
+        if (response.status === 200) {
+          const searchResults = await response.json();
+          this.props.navigation.navigate('SearchedUser', { searchResults });
+          this.setState({ searchQuery: '' });
+          console.log(searchResults)
+        } else if (response.status === 400){
+          throw alert("400: This page isn't working. If the problem continues, contact the site owner" );
+        }else if (response.status === 401){
+          throw alert('401: Authentication failed! you are not authorized to search for contacts');
+        } else if(response.status === 500){
+          throw alert('500: Oops. Something went wrong. This server encountered an error and was unable to complete your request.')
+        } else {
+          throw alert("Something went wrong!")
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
 
 
@@ -151,9 +183,10 @@ export default class ChatInfo extends Component {
           }else if (response.status === 401){
             throw alert('401: Authentication failed! you are not authorized to access chat details');
           } else if (response.status === 403){
-            throw alert('403: Forbidden! you do not have the permissions to access chat details')
+            this.props.navigation.navigate("AllChats");
+            throw alert('You are no longer a member of this chat.')
           } else if (response.status === 404){
-            throw alert('404: Page not found!')
+            this.props.navigation.navigate("AllChats");
           }else if(response.status === 500){
             throw alert('500: Oops. Something went wrong. This server encountered an error and was unable to complete your request.')
           } else {
@@ -193,16 +226,17 @@ export default class ChatInfo extends Component {
       />
 
         <TouchableOpacity
-        style={styles.saveButton}
+        style={styles.addButton}
         onPress={() => {
           this.editConvoName();
         }}>
-        <Text style={styles.saveButtonText}>Save Name</Text>
+        <Text style={styles.addButtonText}>Save Name</Text>
         </TouchableOpacity>
 
         <TextInput
           style={styles.input}
           placeholder="User ID"
+          placeholderTextColor={"#fff"}
           value={this.state.user_id}
           onChangeText={(text) => this.setState({ user_id: text })}
         />
@@ -259,14 +293,16 @@ export default class ChatInfo extends Component {
       marginBottom: 10,
     },
     addButton: {
-      backgroundColor: '#2196F3',
+      backgroundColor: '#a9a9a9',
       padding: 10,
-      borderRadius: 5,
+      borderRadius: 4,
+      marginBottom: 8,
       alignItems: 'center',
     },
     addButtonText: {
-      color: '#fff',
-      fontWeight: 'bold',
+      color: '#f0f8ff',
+      textAlign: 'center',
+      fontWeight: 'bold'
     },
     chatNameInput: {
       margin: 10,
@@ -303,7 +339,7 @@ export default class ChatInfo extends Component {
       alignItems: 'center',
       marginVertical: 10,
       paddingRight: 10, // Add padding to the right to make room for the delete button
-      justifyContent: 'space-between', // Add this to make the delete button go to the right side
+      justifyContent: 'space-between', 
     },
   
     // Add styles for the delete button
@@ -314,7 +350,8 @@ export default class ChatInfo extends Component {
     },
   
     deleteButtonText: {
-      color: 'white',
-      fontWeight: 'bold',
+      color: '#f0f8ff',
+      textAlign: 'center',
+      fontWeight: 'bold'
     },
   });

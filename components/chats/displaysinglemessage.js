@@ -34,15 +34,12 @@ export default class SingleChat extends Component {
 
 
   getStyle = (author) => {
-    console.log(author.user_id)
     const loggedInUserId = parseInt(this.state.session_token);
-    console.log(author.user_id, loggedInUserId, author.user_id === loggedInUserId)
     if (author.user_id === loggedInUserId){
       return styles.right;
     }else{
       return styles.left;
     }
-    // return styles.right;
   }
 
     addMessage = async() =>{

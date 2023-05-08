@@ -24,6 +24,7 @@ export default class SearchedUser extends Component {
         })
         .then((response) => {
           if(response.status === 200){
+            alert("contact added!");
             return response.json()
           }else if (response.status === 400){
             throw alert("400: you can't add yourself as a contact!" );
@@ -52,10 +53,8 @@ export default class SearchedUser extends Component {
 
 
   render() {
-    const { route } = this.props;
-    const { searchResults } = route.params;
-
-    
+    const {route} = this.props;
+    const {searchResults} = route.params;
 
     return (
       <View style={styles.container}>
@@ -97,6 +96,8 @@ export default class SearchedUser extends Component {
     );
   }
 }
+
+
 
 const styles = StyleSheet.create({
   container: {

@@ -47,8 +47,6 @@ export default class AllChats extends Component {
         throw alert('401: Authentication failed! you are not authorized to start a chat');
       } else if(response.status === 500){
         throw alert('500: Oops. Something went wrong. This server encountered an error and was unable to complete your request.')
-      } else {
-        throw alert("Something went wrong!")
       }
     })
     .then((responseJson) => {
@@ -110,7 +108,7 @@ export default class AllChats extends Component {
           onChangeText={(text) => this.setState({ chat_name: text })}
         />
 
-        <TouchableOpacity style={styles.button} onPress={this.startConvo}>
+        <TouchableOpacity style={styles.createChatbutton} onPress={this.startConvo}>
           <Text style={styles.buttonText}>Create Chat</Text>
         </TouchableOpacity>
 
@@ -123,14 +121,19 @@ export default class AllChats extends Component {
         <View styles={styles.chatImage}>
           <Text>Image</Text>
         </View>
+
         <View>
           <Text style={styles.chatName}>{item.name}</Text>
           <Text style={styles.chatSnippet}>{item.last_message.message}</Text>
-          <Button
-          title="..."
-          onPress={() => this.props.navigation.navigate('ChatInfo', { chat_id: item.chat_id })}
-          />
         </View>
+        
+        <TouchableOpacity 
+  style={styles.settingsButton}
+  onPress={() => this.props.navigation.navigate('ChatInfo', { chat_id: item.chat_id })}
+>
+  <Text style={styles.settingsText}>...</Text>
+</TouchableOpacity>
+      
       </View>
     </TouchableOpacity>
   )}
@@ -159,8 +162,9 @@ export default class AllChats extends Component {
       borderRadius: 4,
       padding: 8,
       marginBottom: 16,
+      color: '#f0f8ff',
     },
-    button: {
+    createChatbutton: {
       backgroundColor: '#a9a9a9',
       padding: 12,
       borderRadius: 4,
@@ -177,6 +181,7 @@ export default class AllChats extends Component {
       paddingVertical: 10,
       borderBottomWidth: 1,
       borderBottomColor: '#ccc',
+      justifyContent: 'space-between',
     },
     chatImage: {
       width: 50,
@@ -186,6 +191,16 @@ export default class AllChats extends Component {
       alignItems: 'center',
       justifyContent: 'center',
       marginRight: 10,
+    },
+    settingsButton:{
+      marginRight: 0,
+     
+
+    },
+    settingsText:{
+      color: '#fff',
+      fontSize: 40,
+
     },
     chatName: {
       color: '#fff',

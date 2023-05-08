@@ -34,6 +34,7 @@ export default class UpdateProfile extends Component {
 
     updateProfile = async() => {
         this.setState({error: ""})
+        console.log( this.state)
 
 
         if(!EmailValidator.validate(this.state.email)){
@@ -64,13 +65,14 @@ export default class UpdateProfile extends Component {
         }
         }
 
-        console.log(data)
+        console.log( data)
 
 
       return fetch (`http://localhost:3333/api/1.0.0/user/${this.state.originalData.user_id}`, {
         method: 'PATCH',
           headers: {
-            'X-Authorization': await AsyncStorage.getItem("whatsthat_session_token")
+            'X-Authorization': await AsyncStorage.getItem("whatsthat_session_token"),
+            "Content-Type" : "application/json"
           },
           body: JSON.stringify(data)
           
@@ -108,28 +110,28 @@ export default class UpdateProfile extends Component {
             <TextInput
               style={styles.input}
               value={this.state.first_name}
-              onChangeText={(value) => this.setState({"first_name" : value})}
+              onChangeText={(val) => this.setState({"first_name" : val})}
             />
           
             <Text>Last Name:</Text>
             <TextInput
               style={styles.input}
               value={this.state.last_name}
-              onChangeText={(value) => this.setState({"last_name" : value})}
+              onChangeText={(val) => this.setState({"last_name" : val})}
             />
           
             <Text>Email:</Text>
             <TextInput
               style={styles.input}
               value={this.state.email}
-              onChangeText={(value) => this.setState({"email" : value})}
+              onChangeText={(val) => this.setState({"email" : val})}
             />
           
             <Text>Password:</Text>
             <TextInput
               style={styles.input}
               value={this.state.password}
-              onChangeText={(value) => this.setState({"password" : value})}
+              onChangeText={(val) => this.setState({"password" : val})}
             />
           
             {this.state.error ? <Text style={styles.errorText}>{this.state.error}</Text> : null}

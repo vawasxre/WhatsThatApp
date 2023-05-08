@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
 
 
-export default class Profile extends Component {
+export default class ProfileScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,6 +28,7 @@ export default class Profile extends Component {
         });
 
       });
+      
     }
   
     componentWillUnmount() {
@@ -147,9 +148,12 @@ export default class Profile extends Component {
               uri: this.state.photo
             }}
             style={{
-              width: 100,
-              height: 100
+              width: 200,
+              height: 200,
+              borderRadius: 75,
+              marginBottom: 20
             }}
+            
             /> 
             
             <Text style={styles.label}>Email:</Text>
@@ -208,10 +212,13 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: '#fff'
   },
   value: {
-    fontSize: 16
+    fontSize: 16,
+    color: '#fff',
+    marginBottom: 20
   },
   error: {
     color: 'red',

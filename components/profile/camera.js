@@ -29,8 +29,6 @@ export default function CameraScreen({route, navigation}) {
         let res = await fetch(data.uri);
         let blob = await res.blob()
 
-        //network request here
-
         return fetch (`http://localhost:3333/api/1.0.0/user/${id}/photo`, {
         method: 'POST',
           headers: {

@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
    submitButton: {
       backgroundColor: '#a9a9a9',
       margin: 10,
-      paddingHorizontal: 25,
+      paddingHorizontal: 35,
       borderRadius: 5,
       height: 40,
       justifyContent: 'center'
