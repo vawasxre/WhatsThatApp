@@ -1,5 +1,13 @@
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-console */
+/* eslint-disable no-alert */
+/* eslint-disable camelcase */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import {
+  View, TextInput, TouchableOpacity, Text, StyleSheet,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class EditMessage extends Component {
@@ -11,9 +19,9 @@ export default class EditMessage extends Component {
   }
 
   editMessage = async () => {
-    const message_id = this.props.route.params.message_id;
-    const chat_id = this.props.route.params.chat_id;
-    const message = this.state.message;
+    const { message_id } = this.props.route.params;
+    const { chat_id } = this.props.route.params;
+    const { message } = this.state;
 
     return fetch(`http://localhost:3333/api/1.0.0/chat/${chat_id}/message/${message_id}`, {
       method: 'PATCH',
@@ -21,24 +29,24 @@ export default class EditMessage extends Component {
         'X-Authorization': await AsyncStorage.getItem('whatsthat_session_token'),
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ message: message }),
+      body: JSON.stringify({ message }),
     })
       .then((response) => {
         if (response.status === 200) {
           console.log('Message edited');
           this.props.navigation.goBack();
-        }else if (response.status === 400){
-          throw alert("400: This page isn't working. If the problem continues, contact the site owner" );
-        }else if (response.status === 401){
+        } else if (response.status === 400) {
+          throw alert("400: This page isn't working. If the problem continues, contact the site owner");
+        } else if (response.status === 401) {
           throw alert('401: Authentication failed! you are not authorized to edit this message');
-        } else if (response.status === 403){
-          throw alert('403: Forbidden! you do not have the permissions to edit the message')
-        } else if (response.status === 404){
-          throw alert('404: Page not found!')
-        }else if(response.status === 500){
-          throw alert('500: Oops. Something went wrong. This server encountered an error and was unable to complete your request.')
+        } else if (response.status === 403) {
+          throw alert('403: Forbidden! you do not have the permissions to edit the message');
+        } else if (response.status === 404) {
+          throw alert('404: Page not found!');
+        } else if (response.status === 500) {
+          throw alert('500: Oops. Something went wrong. This server encountered an error and was unable to complete your request.');
         } else {
-          throw alert("Something went wrong!")
+          throw alert('Something went wrong!');
         }
       })
       .catch((error) => {
@@ -47,8 +55,8 @@ export default class EditMessage extends Component {
   };
 
   deleteMessage = async () => {
-    const message_id = this.props.route.params.message_id;
-    const chat_id = this.props.route.params.chat_id;
+    const { message_id } = this.props.route.params;
+    const { chat_id } = this.props.route.params;
 
     return fetch(`http://localhost:3333/api/1.0.0/chat/${chat_id}/message/${message_id}`, {
       method: 'DELETE',
@@ -60,16 +68,16 @@ export default class EditMessage extends Component {
         if (response.status === 200) {
           console.log('Message deleted');
           this.props.navigation.goBack();
-        } else if (response.status === 401){
+        } else if (response.status === 401) {
           throw alert('401: Authentication failed! you are not authorized to delete this message');
-        } else if (response.status === 403){
-          throw alert('403: Forbidden! you do not have the permissions to delete this message')
-        } else if (response.status === 404){
-          throw alert('404: Page not found!')
-        }else if(response.status === 500){
-          throw alert('500: Oops. Something went wrong. This server encountered an error and was unable to complete your request.')
+        } else if (response.status === 403) {
+          throw alert('403: Forbidden! you do not have the permissions to delete this message');
+        } else if (response.status === 404) {
+          throw alert('404: Page not found!');
+        } else if (response.status === 500) {
+          throw alert('500: Oops. Something went wrong. This server encountered an error and was unable to complete your request.');
         } else {
-          throw alert("Something went wrong!")
+          throw alert('Something went wrong!');
         }
       })
       .catch((error) => {
@@ -94,61 +102,54 @@ export default class EditMessage extends Component {
           <Text style={styles.deleteButtonText}>Delete</Text>
         </TouchableOpacity>
 
-        </View>
+      </View>
     );
-}
-
+  }
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#191970',
-      padding: 10,
-    },
-    input: {
-      height: 200,
-      borderWidth: 1,
-      borderColor: '#ccc',
-      borderRadius: 10,
-      padding: 10,
-      marginBottom: 20,
-      color: '#fff'
-    },
-    editButton: {
-      width: 50,
-      height: 50,
-      borderRadius: 25,
-      backgroundColor: '#2196F3',
-      alignItems: 'center',
-      justifyContent: 'center',
-      alignSelf: 'flex-end',
-      marginBottom: 10,
-    },
-    editButtonText: {
-      color: '#fff',
-      fontSize: 20,
-      fontWeight: 'bold',
-    },
-    deleteButton: {
-      width: 50,
-      height: 50,
-      borderRadius: 25,
-      backgroundColor: '#FF0000',
-      alignItems: 'center',
-      justifyContent: 'center',
-      alignSelf: 'flex-end',
-      marginBottom: 10,
-    },
-    deleteButtonText: {
-      color: '#fff',
-      fontSize: 20,
-      fontWeight: 'bold',
-    },
-  });
-  
-  
-  
-  
-  
-  
+  container: {
+    flex: 1,
+    backgroundColor: '#191970',
+    padding: 10,
+  },
+  input: {
+    height: 200,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 20,
+    color: '#fff',
+  },
+  editButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#2196F3',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'flex-end',
+    marginBottom: 10,
+  },
+  editButtonText: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  deleteButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#FF0000',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'flex-end',
+    marginBottom: 10,
+  },
+  deleteButtonText: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+});

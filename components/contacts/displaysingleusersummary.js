@@ -1,5 +1,14 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable no-use-before-define */
+/* eslint-disable react/prop-types */
+/* eslint-disable no-console */
+/* eslint-disable no-alert */
+/* eslint-disable camelcase */
+/* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import {
+  View, Text, StyleSheet, FlatList, TouchableOpacity,
+} from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -9,52 +18,44 @@ export default class SearchedUser extends Component {
     this.state = {
       isLoading: true,
       contactsListData: [],
-      ContactID: ''
-    }
+      ContactID: '',
+    };
   }
 
-
-  addContact = async (user_id) => {
-    
-        return fetch (`http://localhost:3333/api/1.0.0/user/${user_id}/contact`, {
-          method: "POST",
-          headers: {'X-Authorization': await AsyncStorage.getItem("whatsthat_session_token")
-
-          },
-        })
-        .then((response) => {
-          if(response.status === 200){
-            alert("contact added!");
-            return response.json()
-          }else if (response.status === 400){
-            throw alert("400: you can't add yourself as a contact!" );
-          }else if (response.status === 401){
-            throw alert('401: Authentication failed! you are not authorized to add a contact');
-          } else if (response.status === 404){
-            throw alert('404: Page not found!')
-          }else if(response.status === 500){
-            throw alert('500: Oops. Something went wrong. This server encountered an error and was unable to complete your request.')
-          } else {
-            throw alert("Something went wrong!")
-          }
-        })
-        .then((responseJson) => {
-          console.log(responseJson)
-          this.setState({
-            isLoading: false,
-            contactsListData: responseJson
-          });
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+  addContact = async (user_id) => fetch(`http://localhost:3333/api/1.0.0/user/${user_id}/contact`, {
+    method: 'POST',
+    headers: { 'X-Authorization': await AsyncStorage.getItem('whatsthat_session_token') },
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        alert('contact added!');
+        return response.json();
+      } if (response.status === 400) {
+        throw alert("400: you can't add yourself as a contact!");
+      } else if (response.status === 401) {
+        throw alert('401: Authentication failed! you are not authorized to add a contact');
+      } else if (response.status === 404) {
+        throw alert('404: Page not found!');
+      } else if (response.status === 500) {
+        throw alert('500: Oops. Something went wrong. This server encountered an error and was unable to complete your request.');
+      } else {
+        throw alert('Something went wrong!');
       }
-
-
+    })
+    .then((responseJson) => {
+      console.log(responseJson);
+      this.setState({
+        isLoading: false,
+        contactsListData: responseJson,
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 
   render() {
-    const {route} = this.props;
-    const {searchResults} = route.params;
+    const { route } = this.props;
+    const { searchResults } = route.params;
 
     return (
       <View style={styles.container}>
@@ -64,14 +65,18 @@ export default class SearchedUser extends Component {
           data={searchResults}
           renderItem={({ item }) => (
             <View style={styles.resultItem}>
-              <Text style={styles.resultName}>{item.given_name} {item.family_name}</Text>
+              <Text style={styles.resultName}>
+                {item.given_name}
+                {' '}
+                {item.family_name}
+              </Text>
 
-                <TouchableOpacity
-                  style={styles.addContactButton}
-                  onPress={() => this.addContact(item.user_id)}
-                >
-                  <Text style={styles.addContactButtonText}>Add Contact</Text>
-                </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.addContactButton}
+                onPress={() => this.addContact(item.user_id)}
+              >
+                <Text style={styles.addContactButtonText}>Add Contact</Text>
+              </TouchableOpacity>
 
             </View>
           )}
@@ -85,19 +90,17 @@ export default class SearchedUser extends Component {
         />
 
         <View style={styles.footer}>
-            <TouchableOpacity
-              style={styles.returnButton}
-              onPress={() => this.props.navigation.navigate('ContactsList')}
-            >
-              <Text style={styles.returnButtonText}>Return</Text>
-            </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.returnButton}
+            onPress={() => this.props.navigation.navigate('ContactsList')}
+          >
+            <Text style={styles.returnButtonText}>Return</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
   }
 }
-
-
 
 const styles = StyleSheet.create({
   container: {
