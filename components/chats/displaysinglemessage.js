@@ -102,7 +102,7 @@ export default class SingleChat extends Component {
         if (response.status === 200) {
           return response.json();
         } if (response.status === 401) {
-          throw alert('401: Authentication failed! you are not authorized to access this page');
+          throw console.log('401: Authentication failed! you are not authorized to access this page');
         } else if (response.status === 403) {
           throw alert('403: Forbidden! you do not have the permissions to view this page');
         } else if (response.status === 404) {
