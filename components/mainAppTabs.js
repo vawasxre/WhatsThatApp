@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import MainChatStack from './chats/chatStack';
 import MainContactsStack from './contacts/contactsStack';
@@ -40,9 +41,27 @@ export default class MainAppNav extends Component {
                       headerShown: false,
                     },
                   }}>
-                    <MainAppTabs.Screen name="Chats" component={MainChatStack}/>
-                    <MainAppTabs.Screen name="Contacts" component={MainContactsStack}/>
-                    <MainAppTabs.Screen name="Profile" component={MainProfileStack}/>
+                    <MainAppTabs.Screen name="Chats" 
+                    component={MainChatStack}
+                    options={{
+                        tabBarIcon: ({ color, size }) => (
+                          <Icon name="chatbox-ellipses-outline" size={size} color={color} />
+                        ),
+                      }}/>
+                    <MainAppTabs.Screen name="Contacts" 
+                    component={MainContactsStack}
+                    options={{
+                        tabBarIcon: ({ color, size }) => (
+                          <Icon name="people-outline" size={size} color={color} />
+                        ),
+                      }}/>
+                    <MainAppTabs.Screen name="Profile" 
+                    component={MainProfileStack}
+                    options={{
+                        tabBarIcon: ({ color, size }) => (
+                          <Icon name="settings-outline" size={size} color={color} />
+                        ),
+                      }} />
                 </MainAppTabs.Navigator>
         );
     }

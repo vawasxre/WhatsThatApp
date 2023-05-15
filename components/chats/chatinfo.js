@@ -111,7 +111,7 @@ export default class ChatInfo extends Component {
         } else if (response.status === 403){
           throw alert('403: Forbidden! you do not have the permissions to add a user to the chat')
         } else if (response.status === 404){
-          throw alert('404: Page not found!')
+          throw alert('404: no input for contact detected!')
         }else if(response.status === 500){
           throw alert('500: Oops. Something went wrong. This server encountered an error and was unable to complete your request.')
         } else {
@@ -124,7 +124,7 @@ export default class ChatInfo extends Component {
           user_id: '',
           isLoading: false,
           chatInfoData: responseJson
-         }); // clear input after adding user
+         });
       })
       .catch((error) => {
         console.log(error)
@@ -245,7 +245,7 @@ export default class ChatInfo extends Component {
           style={styles.addButton}
           onPress={() => {
             this.addUser(this.state.user_id);
-            this.setState({ user_id: '' }); // clear input after adding user
+            this.setState({ user_id: '' });
           }}
         >
           <Text style={styles.addButtonText}>Add User</Text>
@@ -324,7 +324,8 @@ export default class ChatInfo extends Component {
     },
     chatCreator: {
       fontSize: 18,
-      marginBottom: 10
+      marginBottom: 10,
+      color:'#fff'
     },
     label: {
       fontSize: 16,
@@ -332,17 +333,24 @@ export default class ChatInfo extends Component {
       marginTop: 10
     },
     membersTitle: {
-      marginBottom: 10
+      marginBottom: 10,
+      color: '#fff'
     },
     memberItem: {
       flexDirection: 'row',
       alignItems: 'center',
       marginVertical: 10,
-      paddingRight: 10, // Add padding to the right to make room for the delete button
+      paddingRight: 10,
       justifyContent: 'space-between', 
     },
-  
-    // Add styles for the delete button
+    memberName: {
+      color:'#fff'
+
+    },
+    memberEmail: {
+      color:'#fff'
+
+    },
     deleteButton: {
       backgroundColor: 'red',
       padding: 5,
@@ -350,7 +358,7 @@ export default class ChatInfo extends Component {
     },
   
     deleteButtonText: {
-      color: '#f0f8ff',
+      color: '#ffff',
       textAlign: 'center',
       fontWeight: 'bold'
     },

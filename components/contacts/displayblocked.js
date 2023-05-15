@@ -129,7 +129,7 @@ export default class BlockedContacts extends Component {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: '#191970',
       padding: 20,
     },
     itemContainer: {
@@ -145,6 +145,7 @@ const styles = StyleSheet.create({
     itemName: {
       fontSize: 18,
       fontWeight: 'bold',
+      color: '#fff',
     },
     unblockButton: {
       backgroundColor: 'red',

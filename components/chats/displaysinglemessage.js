@@ -154,7 +154,7 @@ export default class SingleChat extends Component {
                         });
                       }}
                     >
-                      <Text style={styles.editButtonText}>o</Text>
+                      <Text style={styles.editButtonText}>...</Text>
                     </TouchableOpacity>
                   </View>
                 )}
@@ -194,7 +194,7 @@ export default class SingleChat extends Component {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: '#191970',
     },
     chatWindow: {
       flex: 1,
@@ -202,7 +202,7 @@ export default class SingleChat extends Component {
     },
     left: {
       alignSelf: 'flex-start',
-      backgroundColor: '#f0f0f0',
+      backgroundColor: `#483d8b`,
       color: 'red',
       padding: 10,
       marginVertical: 5,
@@ -211,7 +211,7 @@ export default class SingleChat extends Component {
     },
     right: {
       alignSelf: 'flex-end',
-      backgroundColor: '#0084ff',
+      backgroundColor: `#4b0082`,
       color: 'green',
       padding: 10,
       marginVertical: 5,
@@ -220,7 +220,7 @@ export default class SingleChat extends Component {
     },
     message: {
       fontSize: 16,
-      color: '#000',
+      color: '#fff',
     },
     typeBox: {
       flexDirection: 'row',
@@ -237,7 +237,7 @@ export default class SingleChat extends Component {
       marginRight: 10,
     },
     sendButton: {
-      backgroundColor: '#0084ff',
+      backgroundColor: '#a9a9a9',
       borderRadius: 10,
       padding: 10,
     },
@@ -247,13 +247,7 @@ export default class SingleChat extends Component {
       textAlign: 'center',
     },
     editButton: {
-      backgroundColor: '#0084ff',
-      borderRadius: 15,
-      padding: 5,
-      width: 30,
-      height: 30,
-      alignItems: 'center',
-      justifyContent: 'center',
+      marginRight: 0,
     },
     editButtonText: {
       color: '#fff',

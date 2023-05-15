@@ -79,7 +79,8 @@ export default class UpdateProfile extends Component {
       })
       .then((response) => {
         if(response.status === 200){
-            console.log("User Updated!")
+            alert("Details updated!")
+
           return response.json()
         }else if (response.status === 400){
           throw alert("400: This page isn't working. If the problem continues, contact the site owner" );
@@ -106,28 +107,28 @@ export default class UpdateProfile extends Component {
       
         return(
             <View style={styles.container}>
-            <Text>First Name:</Text>
+            <Text style={styles.profileText}>First Name:</Text>
             <TextInput
               style={styles.input}
               value={this.state.first_name}
               onChangeText={(val) => this.setState({"first_name" : val})}
             />
           
-            <Text>Last Name:</Text>
+            <Text style={styles.profileText}>Last Name:</Text>
             <TextInput
               style={styles.input}
               value={this.state.last_name}
               onChangeText={(val) => this.setState({"last_name" : val})}
             />
           
-            <Text>Email:</Text>
+            <Text style={styles.profileText}>Email:</Text>
             <TextInput
               style={styles.input}
               value={this.state.email}
               onChangeText={(val) => this.setState({"email" : val})}
             />
           
-            <Text>Password:</Text>
+            <Text style={styles.profileText}>Password:</Text>
             <TextInput
               style={styles.input}
               value={this.state.password}
@@ -162,7 +163,7 @@ export default class UpdateProfile extends Component {
         container: {
           flex: 1,
           padding: 20,
-          backgroundColor: '#fff',
+          backgroundColor: '#191970',
         },
         input: {
           height: 40,
@@ -170,9 +171,11 @@ export default class UpdateProfile extends Component {
           borderWidth: 1,
           marginBottom: 10,
           paddingHorizontal: 10,
+          color: '#fff'
         },
         updateProfileButton: {
-          backgroundColor: '#1e90ff',
+          backgroundColor: '#a9a9a9',
+          margin: 5,
           padding: 10,
           borderRadius: 5,
           alignItems: 'center',
@@ -183,10 +186,15 @@ export default class UpdateProfile extends Component {
           fontSize: 16,
         },
         returnButton: {
-            backgroundColor: '#1e90ff',
+          backgroundColor: '#a9a9a9',
             padding: 10,
+            margin: 5,
             borderRadius: 5,
             alignItems: 'center',
+          },
+          profileText: {
+            color:'#fff'
+
           },
         returnbuttonText: {
             color: '#fff',

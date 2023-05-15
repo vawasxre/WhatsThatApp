@@ -103,7 +103,7 @@ export default class EditMessage extends Component {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: '#191970',
       padding: 10,
     },
     input: {
@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
       borderRadius: 10,
       padding: 10,
       marginBottom: 20,
+      color: '#fff'
     },
     editButton: {
       width: 50,

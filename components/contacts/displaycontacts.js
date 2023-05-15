@@ -179,6 +179,7 @@ export default class ContactsList extends Component {
           onChangeText={searchQuery => this.setState({searchQuery})}
           value={this.state.searchQuery}
           placeholder="Search users..."
+          placeholderTextColor={"#fff"}
         />
 
         <TouchableOpacity
@@ -269,18 +270,21 @@ export default class ContactsList extends Component {
       },
 
       itemContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingVertical: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 10,
+          padding: 10,
+          borderWidth: 1,
+          borderColor: '#ccc',
+          borderRadius: 5,
+          width: '100%',
       },
       itemName: {
         fontSize: 16,
         fontWeight: 'bold',
         marginRight: 10,
-        color: '#000',
+        color: '#fff',
       },
       deleteButton: {
         backgroundColor: '#f00',
